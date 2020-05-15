@@ -1,0 +1,3 @@
+requests==2.23.0
+parsel==1.6.0
+icalendar==4.0.6
