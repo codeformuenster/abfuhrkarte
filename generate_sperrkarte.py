@@ -1,7 +1,8 @@
-import requests
 import json
-from parsel import Selector
+import requests
+import time
 from icalendar import Calendar, Event
+from parsel import Selector
 
 base_url = "https://www.muellmax.de/abfallkalender/awm/res/AwmStart.php"
 headers = {
@@ -19,12 +20,13 @@ def request_street_names():
         'xxx': '1',
         'mm_ses': 'bW5oQmc2RmxuMVo5N1hGbUNlWXcyU3VzNGVVN0QwL3RZVGxIV090TitDcHJacGVIVXdGUlhzbEw5UEVXczhwS3JtSGNZZW1vUjBEbmJGL2l5Tk13Q3M3b01wK09FTzdyakphSlJ4VXg5VEhVTGt5QmVpOUY1QmpJU0lsa01HZmRreW83TGtGa1ZMMVRyaG0zcVBIMzlxelNuSUU1cTJvTFhlckZCcDlRVjdmamZJN2ZNRFlLTmdkOFgwRXBVV1lvd0pVdEtxb1Bkc0hqMy9OQk11aTVKSGprQ3lKazEwZ0VwWlNuMkt0UHhyY3dMNzVnaTVhQ053MVpwOEdZN0txQzRLYVI5aTJrMjFBTWx2SFVQd3hmMnc9PQ==',
         'mm_frm_str_name': '',
-        'mm_aus_str_txt_submit':' suchen',
+        'mm_aus_str_txt_submit': 'suchen',
     }
     response = requests.post(base_url, headers=headers, data=data)
     selector = Selector(text=response.text)
 
     return selector.css("select#mm_frm_str_sel option::attr(value)").getall()
+
 
 def create_session(street_name):
     data = {
@@ -39,7 +41,6 @@ def create_session(street_name):
     return selector.css("div#m_box form div input::attr(value)").get()
 
 
-
 def request_calendar(session):
     data = {
         'xxx': '1',
@@ -51,6 +52,7 @@ def request_calendar(session):
     response = requests.post(base_url, headers=headers, data=data)
     return response.text
 
+
 def parse_ical(ical_str, street_name):
     ical = Calendar.from_ical(ical_str)
     for component in ical.walk():
@@ -59,6 +61,7 @@ def parse_ical(ical_str, street_name):
             if not date in dates_streetnames:
                 dates_streetnames[date] = []
             dates_streetnames[date].append(street_name)
+
 
 def handle_street_name(street_name):
     # print(f'creating session for {street_name}')
@@ -75,16 +78,21 @@ def generate():
     street_names = request_street_names()
     print(len(street_names))
 
+    sleep_time = 3
+
     for i in range(len(street_names)):
-        print(f'requesting schedule for "{street_names[i]}" ... ', end='', flush=True)
+        print(
+            f'requesting schedule for "{street_names[i]}" ... ', end='', flush=True)
         handle_street_name(street_names[i])
         print('done')
+        print(f'sleeping {sleep_time} seconds ... ', end='', flush=True)
+        time.sleep(sleep_time)
+        print('done')
 
-
-    # print(dates_streetnames)
-    with open('data.txt', 'w', encoding='utf-8') as outfile:
+    with open('data/data.txt', 'w', encoding='utf-8') as outfile:
         json.dump(dates_streetnames, outfile,
-            ensure_ascii=False, sort_keys=True)
+                  ensure_ascii=False, sort_keys=True)
     print('All done!')
+
 
 generate()
