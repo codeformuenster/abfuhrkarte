@@ -1,0 +1,22 @@
+:root {
+  --margin: 2rem;
+}
+body {
+  max-width: 960px;
+}
+
+main {
+  display: flex;
+}
+
+.map-container {
+  height: 60vh;
+  flex: 1;
+  margin-right: var(--margin);
+  /* width: 580px; */
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}

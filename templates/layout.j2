@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" href="https://newcss.net/lite.css" />
+    <link rel="stylesheet" href="abfuhrkarte.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+
+    <title>Abfuhrtermine Münster {{ title }}</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Abfuhrtermine Münster {{ title }}</h1>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <p>
+      Realisiert unter Verwendung des Datensatzes
+      <a
+        href="https://opendata.stadt-muenster.de/dataset/entsorgungskalender-2020-der-abfallwirtschaftsbetriebe-m%C3%BCnster-awm"
+        ><q
+          >Entsorgungskalender 2020 der Abfallwirtschaftsbetriebe Münster
+          (AWM)</q
+        ></a
+      >
+      bereitgestellt von der Stadt Münster unter
+      <a href="http://www.govdata.de/dl-de/by-2-0"
+        >Datenlizenz Deutschland – Namensnennung – Version 2.0</a
+      >.
+    </p>
+  </body>
+</html>
