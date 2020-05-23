@@ -1,3 +1,12 @@
 {% extends "layout.j2" %}
 
-{% block content %}content, yo{% endblock %}
+{% block content %}
+{% for trash_type, street_names in date_data.items() %}
+    <h2>{{ trash_type }}</h2>
+    <ul>
+    {% for street_name in street_names %}
+        <li>{{ street_name }}</li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}

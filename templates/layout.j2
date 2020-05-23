@@ -16,12 +16,12 @@
       crossorigin=""
     />
 
-    <title>Abfuhrtermine Münster {{ title }}</title>
+    <title>{{ title | to_title('Abfuhrtermine Münster') }}</title>
   </head>
 
   <body>
     <header>
-      <h1>Abfuhrtermine Münster {{ title }}</h1>
+      <h1>{{ title | to_title('Abfuhrtermine Münster') }}</h1>
     </header>
 
     <main>

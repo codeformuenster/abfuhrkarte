@@ -27,7 +27,7 @@ if __name__ == '__main__':
         calendar_data = dict_from_jsonfile('data/calendar.json')
 
         write_html({
-            'title': 'from py'
+            'calendar_data': calendar_data
         })
     else:
         print('wat')
