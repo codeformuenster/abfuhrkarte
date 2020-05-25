@@ -7,6 +7,14 @@ from datetime import datetime
 from abfuhrkarte.constants import csv_url
 
 
+def format_date(german_date):
+    return datetime.strptime(german_date, "%d.%m.%Y").strftime("%Y-%m-%d")
+
+
+def format_waste_type(waste_type):
+    return waste_type.split(" ")[0].strip(" ,")
+
+
 def download_csv():
     r = requests.get(csv_url)
     csvio = io.StringIO(r.text, newline="")
@@ -23,20 +31,41 @@ def import_calendar(rows):
     #     "waste_type_n": ["street_name_m", ...]
     #   }
     # }
-    dates_streetnames = {}
+
+    # {
+    #   "YYYY-MM-DD": [{
+    #     "waste_type": "xxx",
+    #     "street_name": "xxx",
+    #     "district": "xxx",
+    #     "is_original_date": False,
+    #     "original_date": "YYYY-MM-DD",
+    #   }]
+    # }
+    calendar = {}
 
     for row in rows:
-        date = datetime.strptime(row.get('termin', row.get(
-            'termin_vom')), "%d.%m.%Y").strftime("%Y-%m-%d")
-        waste_type = row.get('muellart')
+        date = format_date(row.get('termin'))
+        is_original_date = True
+        original_date = None
+        try:
+            original_date = format_date(row.get('termin_vom'))
+            is_original_date = False
+        except:
+            pass
 
-        if not date in dates_streetnames:
-            dates_streetnames[date] = {}
-        if not waste_type in dates_streetnames[date]:
-            dates_streetnames[date][waste_type] = []
-        dates_streetnames[date][waste_type].append(row.get('strasse'))
+        waste_type = format_waste_type(row.get('muellart'))
 
-    return dates_streetnames
+        if not date in calendar:
+            calendar[date] = []
+        calendar[date].append({
+            'waste_type': waste_type,
+            'street_name': row.get('strasse'),
+            'district': row.get('stadtteil'),
+            'is_original_date': is_original_date,
+            'original_date': original_date
+        })
+
+    return calendar
 
 
 def download_and_import():

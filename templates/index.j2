@@ -1,9 +1,8 @@
 {% extends "layout.j2" %}
 
 {% block content %}
-<ul>
-{% for date, date_data in calendar_data.calendar.items() %}
+<h2>Terminübersicht</h2>
+<ul>{%- for date in dates %}
     <li><a href="/{{ date }}/">{{ date | dateformat }}</a></li>
-{% endfor %}
-</ul>
+{%- endfor %}</ul>
 {% endblock %}
