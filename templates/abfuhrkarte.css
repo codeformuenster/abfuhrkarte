@@ -62,6 +62,9 @@ main {
   .calendar {
      flex: 0 40%;
   }
+  .streets {
+    column-count: 2;
+  }
 }
 
 /* For the month */

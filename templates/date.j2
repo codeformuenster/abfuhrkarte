@@ -16,9 +16,9 @@
     {%- for district, items in waste_items.items() %}
     <details id="{{ district ~ '-' ~ waste_type | slugify }}">
       <summary>{{ district }} ({{ waste_type }})</summary>
-      <p>
-        {%- for item in items %}{{ item.street_name }}{% if not loop.last %}, {% endif %}{%- endfor %}
-      </p>
+      <ul class="streets">{%- for item in items -%}
+        <li>{{ item.street_name }}</li>
+        {%- endfor -%}</ul>
     </details>
     {%- endfor %}
 {%- endfor %}
