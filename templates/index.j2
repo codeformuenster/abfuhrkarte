@@ -2,7 +2,34 @@
 
 {% block content %}
 <h2>Terminübersicht</h2>
+
+<div class="calendars">
+{% for month, days in months.items() %}
+<div class="calendar">
+  <div class="month-indicator">
+    <time datetime="{{ days[0] | dateformat('%Y-%m') }}">{{ days[0] | dateformat('%B %Y') }}</time>
+  </div>
+  <div class="day-of-week">
+    <div>Mo</div>
+    <div>Di</div>
+    <div>Mi</div>
+    <div>Do</div>
+    <div>Fr</div>
+    <div>Sa</div>
+    <div>So</div>
+  </div>
+  <div class="date-grid">
+    {% for day in days %}<a href="/{{ day }}/" data-dow="{{ day | dateformat('%a') | lower }}">
+      <time datetime="{{ day }}">{{ day | dateformat('%-d') }}</time>
+    </a>{% endfor %}
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<hr>
+
 <ul>{%- for date in dates %}
-    <li><a href="/{{ date }}/">{{ date | dateformat }}</a></li>
+    <li data-date="{{ date }}"><a href="/{{ date }}/">{{ date | dateformat }}</a></li>
 {%- endfor %}</ul>
 {% endblock %}

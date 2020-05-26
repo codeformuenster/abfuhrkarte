@@ -5,6 +5,7 @@ from json import dumps
 from locale import LC_ALL, setlocale
 from os import makedirs
 from slugify import slugify
+from shutil import copyfile
 
 env = Environment(
     loader=FileSystemLoader('templates'),
@@ -49,10 +50,18 @@ def write_html(data):
 
     dates = [date for date in data['calendar_data']]
 
+    months = {}
+    for date in dates:
+        month = date[0:7]
+        if month not in months:
+            months[month] = []
+        months[month].append(date)
+
     makedirs('dist', exist_ok=True)
     template_template('index.j2', 'dist/index.html', {
         'title': '',
         'dates': dates,
+        'months': months,
     })
 
     for date in dates:
@@ -73,3 +82,6 @@ def write_html(data):
             'title': dateformat(date),
             'data': date_data,
         })
+
+    for filename in ['abfuhrkarte.js', 'abfuhrkarte.css']:
+        copyfile(f'templates/{filename}', f'dist/{filename}')
