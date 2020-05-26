@@ -20,7 +20,7 @@ if __name__ == '__main__':
     elif 'generate_html' in argv:
         from abfuhrkarte.html import write_html
 
-        geometries = dict_from_jsonfile(geometries_filename)
+        # geometries = dict_from_jsonfile(geometries_filename)
         calendar_data = dict_from_jsonfile(calendar_filename)
 
         write_html({
