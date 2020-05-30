@@ -5,7 +5,7 @@
 
 <div class="calendars">
 {% for month, days in months.items() %}
-<div class="calendar">
+<div class="calendar" data-month="{{ days[0] | dateformat('%Y-%m') }}">
   <div class="month-indicator">
     <time datetime="{{ days[0] | dateformat('%Y-%m') }}">{{ days[0] | dateformat('%B %Y') }}</time>
   </div>
