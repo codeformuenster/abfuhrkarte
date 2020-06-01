@@ -12,6 +12,7 @@ env = Environment(
     autoescape=select_autoescape(['html']),
 )
 
+
 @contextmanager
 def locale_de():
     saved = setlocale(LC_ALL)
@@ -28,6 +29,7 @@ def dateformat(value, format='%A, %d.%m.%Y'):
 
 def to_title(value, prefix):
     return f'{prefix} {value}'.strip()
+
 
 def to_json(value):
     return dumps(value)
@@ -83,5 +85,5 @@ def write_html(data):
             'data': date_data,
         })
 
-    for filename in ['abfuhrkarte.js', 'abfuhrkarte.css']:
+    for filename in ['abfuhrkarte.js', 'abfuhrkarte.css', 'favicon.svg']:
         copyfile(f'templates/{filename}', f'dist/{filename}')
