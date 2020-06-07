@@ -14,17 +14,29 @@ L.tileLayer("https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png", {
 
 const streetsLayer = L.geoJSON({ features: [], type: 'FeatureCollection' }).addTo(map);
 
+const fetchData = async (date) => {
+  const resp = await fetch(`/data/${date}.json`);
+  return resp.json();
+}
+
 let state = {
   selectedDate: null,
   selectedWaste: null,
-  calendar: null,
-  geometries: null,
+  data: Object.create(null),
 }
 
-const updateState = (newState) => {
+const updateState = async (newState) => {
   state = { ...state, ...newState };
 
-  const { calendar, selectedDate, selectedWaste, geometries } = state;
+  const { selectedDate, selectedWaste } = state;
+
+  let data = state.data[selectedDate];
+
+  if (!data) {
+    data = await fetchData(selectedDate);
+    state.data[selectedDate] = data;
+  }
+
 
   for (const link of document.querySelectorAll("a[role=button]")) {
     const { date, wastetype } = link.dataset;
@@ -36,34 +48,23 @@ const updateState = (newState) => {
   }
 
   streetsLayer.clearLayers();
-  let numNoGeometries = 0;
-  calendar[selectedDate]
-    .filter(({ waste_type }) => waste_type === selectedWaste)
-    .forEach(({ street_name }) => {
-      if (geometries[street_name]) {
-        streetsLayer.addData(geometries[street_name]);
-      } else {
-        console.log(`No geometries for ${street_name}`);
-        numNoGeometries++;
-      }
-    });
-  console.log(`No geometries for ${numNoGeometries} streets`);
-  map.fitBounds(streetsLayer.getBounds())
+  for (const [, { g, w }] of Object.entries(data)) {
+    if (w.includes(selectedWaste) && g !== null) {
+      streetsLayer.addData(g);
+    }
+  }
+  map.fitBounds(streetsLayer.getBounds());
 }
 
-const fetchData = async () => {
-  const [geometriesResp, calendarResp] = await Promise.all([fetch('/geometries.json'), fetch('/calendar.json')]);
-  return Promise.all([geometriesResp.json(), calendarResp.json()]);
-}
-
-const init = async () => {
-  const [geometries, calendar] = await fetchData();
+const init = () => {
+  let selectedDate = null;
+  let selectedWaste = null;
 
   for (const wasteLink of document.querySelectorAll("a[data-wastetype]")) {
     const { wastetype } = wasteLink.dataset;
 
-    if (state.selectedWaste === null) {
-      state.selectedWaste = wastetype;
+    if (selectedWaste === null) {
+      selectedWaste = wastetype;
     }
 
     wasteLink.addEventListener('click', () => updateState({ selectedWaste: wastetype }));
@@ -72,15 +73,14 @@ const init = async () => {
   for (const dateLink of document.querySelectorAll("li:not([hidden=true]) a[role=button]")) {
     const { date } = dateLink.dataset;
 
-    if (state.selectedDate === null) {
-      state.selectedDate = date;
+    if (selectedDate === null) {
+      selectedDate = date;
     }
 
     dateLink.addEventListener('click', () => updateState({ selectedDate: date }));
   }
 
-  updateState({ geometries, calendar });
-  console.log({ state })
+  updateState({ selectedWaste, selectedDate });
 }
 
 init();

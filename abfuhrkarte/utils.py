@@ -1,4 +1,4 @@
-from json import load, dump
+from json import dump, load
 from os import makedirs
 from pathlib import Path
 
@@ -8,7 +8,7 @@ def dict_to_jsonfile(data_dict, path_with_filename):
     makedirs(path.parent, exist_ok=True)
     with open(path, 'w', encoding='utf-8') as outfile:
         dump(data_dict, outfile,
-             ensure_ascii=False, sort_keys=True)
+             ensure_ascii=False, sort_keys=True, indent=None, separators=(',', ':'))
 
 
 def dict_from_jsonfile(path_with_filename):

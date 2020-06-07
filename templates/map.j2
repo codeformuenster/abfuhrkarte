@@ -6,7 +6,7 @@
     <div class="sidebar">
         <h3>Kalender</h3>
         {%- for item in waste_types %}
-        <a role="button" data-wastetype="{{ item }}">{{ item }}</a>
+        <a role="button" data-wastetype="{{ item[:1] }}">{{ item }}</a>
         {% if not loop.last %} - {% endif %}
         {%- endfor %}
         <div class="sidebar-inner-scroller">

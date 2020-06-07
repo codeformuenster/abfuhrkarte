@@ -1,9 +1,17 @@
 from sys import argv
 
-from abfuhrkarte.data import import_calendar, download_csv
-from abfuhrkarte.geometry import query_geometries
-from abfuhrkarte.utils import dict_to_jsonfile, dict_from_jsonfile
 from abfuhrkarte.constants import calendar_filename, geometries_filename
+from abfuhrkarte.data import download_csv, import_calendar
+from abfuhrkarte.geometry import query_geometries
+from abfuhrkarte.utils import dict_from_jsonfile, dict_to_jsonfile
+
+
+def analyze_geometry(geometries):
+    missing_streets = []
+    for street_name in geometries:
+        if geometries[street_name] is None:
+            missing_streets.append(street_name)
+    print(missing_streets)
 
 
 if __name__ == '__main__':
@@ -17,14 +25,17 @@ if __name__ == '__main__':
         street_names = list(set([entry.get('strasse') for entry in data]))
         geometries = query_geometries(street_names)
         dict_to_jsonfile(geometries, geometries_filename)
+    elif 'analyze_geometry' in argv:
+        analyze_geometry(dict_from_jsonfile(geometries_filename))
     elif 'generate_html' in argv:
         from abfuhrkarte.html import write_html
 
-        # geometries = dict_from_jsonfile(geometries_filename)
+        geometries = dict_from_jsonfile(geometries_filename)
         calendar_data = dict_from_jsonfile(calendar_filename)
 
         write_html({
             'calendar_data': calendar_data,
+            'geometries': geometries,
         })
     else:
         print('command required:')

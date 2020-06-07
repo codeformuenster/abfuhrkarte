@@ -1,11 +1,14 @@
 from contextlib import contextmanager
 from datetime import datetime
-from jinja2 import Environment, FileSystemLoader, select_autoescape
 from json import dumps
 from locale import LC_ALL, setlocale
 from os import makedirs
-from slugify import slugify
 from shutil import copyfile
+
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from slugify import slugify
+
+from abfuhrkarte.utils import dict_to_jsonfile
 
 env = Environment(
     loader=FileSystemLoader('templates'),
@@ -50,6 +53,8 @@ def template_template(template_name, output_filename, data):
 
 def write_html(data):
 
+    makedirs('dist/data', exist_ok=True)
+
     dates = [date for date in data['calendar_data']]
 
     waste_types = []
@@ -64,7 +69,17 @@ def write_html(data):
 
     waste_types = list(set(waste_types))
 
-    makedirs('dist', exist_ok=True)
+    geometries_dict = {}
+    geometries_slim = {}
+    street_names = list(data['geometries'].keys())
+    for index in range(len(street_names)):
+        new_key = f'{index:x}'
+        if data['geometries'][street_names[index]]:
+            geometries_slim[new_key] = data['geometries'][street_names[index]]['geometry']
+        geometries_dict[street_names[index]] = new_key
+
+    # dict_to_jsonfile(geometries_slim, 'dist/geometries.json')
+
     template_template('index.j2', 'dist/index.html', {
         'title': '',
         'dates': dates,
@@ -76,6 +91,7 @@ def write_html(data):
         makedirs(f'dist/{date}', exist_ok=True)
 
         date_data = {}
+        json_data = {}
         for item in data['calendar_data'][date]:
             district = item['district']
             waste_type = item['waste_type']
@@ -86,11 +102,19 @@ def write_html(data):
 
             date_data[waste_type][district].append(item)
 
+            slim_name = geometries_dict[item['street_name']]
+            if slim_name not in json_data:
+                json_data[slim_name] = {'g': geometries_slim.get(slim_name, None), 'w': []}
+            json_data[slim_name]['w'].append(waste_type[:1])
+
+
         template_template('date.j2', f'dist/{date}/index.html', {
             'title': dateformat(date),
             'data': date_data,
             'scripts': [],
         })
+
+        dict_to_jsonfile(json_data, f'dist/data/{date}.json')
 
     makedirs('dist/karte', exist_ok=True)
     template_template('map.j2', 'dist/karte/index.html', {
@@ -100,10 +124,5 @@ def write_html(data):
         'scripts': ['hide-past.js', 'map.js'],
     })
 
-
-
     for filename in ['hide-past.js', 'map.js', 'abfuhrkarte.css', 'favicon.svg']:
         copyfile(f'templates/{filename}', f'dist/{filename}')
-
-    copyfile('data/geometries.json', 'dist/geometries.json')
-    copyfile('data/calendar.json', 'dist/calendar.json')

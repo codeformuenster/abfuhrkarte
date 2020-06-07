@@ -1,8 +1,8 @@
 import csv
 import io
-import requests
-
 from datetime import datetime
+
+import requests
 
 from abfuhrkarte.constants import csv_url
 
