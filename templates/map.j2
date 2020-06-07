@@ -1,0 +1,20 @@
+{% extends "layout.j2" %}
+
+{% block content %}
+<div class="map-container">
+    <div id="map"></div>
+    <div class="sidebar">
+        <h3>Kalender</h3>
+        {%- for item in waste_types %}
+        <a role="button" data-wastetype="{{ item }}">{{ item }}</a>
+        {% if not loop.last %} - {% endif %}
+        {%- endfor %}
+        <div class="sidebar-inner-scroller">
+            <ul>{%- for date in dates %}
+            <li data-date="{{ date }}"><a role="button"  data-date="{{ date }}">{{ date | dateformat }}</a></li>
+            {%- endfor %}</ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

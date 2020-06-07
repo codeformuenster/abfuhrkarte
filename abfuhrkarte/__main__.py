@@ -24,7 +24,7 @@ if __name__ == '__main__':
         calendar_data = dict_from_jsonfile(calendar_filename)
 
         write_html({
-            'calendar_data': calendar_data
+            'calendar_data': calendar_data,
         })
     else:
         print('command required:')

@@ -52,18 +52,24 @@ def write_html(data):
 
     dates = [date for date in data['calendar_data']]
 
+    waste_types = []
     months = {}
     for date in dates:
         month = date[0:7]
         if month not in months:
             months[month] = []
         months[month].append(date)
+        for item in data['calendar_data'][date]:
+            waste_types.append(item['waste_type'])
+
+    waste_types = list(set(waste_types))
 
     makedirs('dist', exist_ok=True)
     template_template('index.j2', 'dist/index.html', {
         'title': '',
         'dates': dates,
         'months': months,
+        'scripts': ['hide-past.js'],
     })
 
     for date in dates:
@@ -83,7 +89,21 @@ def write_html(data):
         template_template('date.j2', f'dist/{date}/index.html', {
             'title': dateformat(date),
             'data': date_data,
+            'scripts': [],
         })
 
-    for filename in ['abfuhrkarte.js', 'abfuhrkarte.css', 'favicon.svg']:
+    makedirs('dist/karte', exist_ok=True)
+    template_template('map.j2', 'dist/karte/index.html', {
+        'include_leaflet': True,
+        'dates': dates,
+        'waste_types': waste_types,
+        'scripts': ['hide-past.js', 'map.js'],
+    })
+
+
+
+    for filename in ['hide-past.js', 'map.js', 'abfuhrkarte.css', 'favicon.svg']:
         copyfile(f'templates/{filename}', f'dist/{filename}')
+
+    copyfile('data/geometries.json', 'dist/geometries.json')
+    copyfile('data/calendar.json', 'dist/calendar.json')

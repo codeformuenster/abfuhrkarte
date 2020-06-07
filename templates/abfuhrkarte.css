@@ -27,21 +27,38 @@ body {
   padding: 1em;
 }
 
+a[role=button] {
+  cursor: pointer;
+}
+
+a.selected {
+  font-weight: bold;
+  text-decoration: underline;
+  color: black;
+}
+
 .map-container {
-  height: 60vh;
-  flex: 1;
-  margin-right: var(--margin);
-  /* width: 580px; */
+  height: 70vh;
+  width: 100%;
+  display: flex;
+}
+
+.sidebar {
+  max-width: 20vw;
+  flex: 1 30%;
+  padding: 0 10px;
+  overflow: hidden;
+}
+
+.sidebar-inner-scroller {
+  overflow: hidden scroll;
+  height: calc(100% - 46px);
 }
 
 #map {
   height: 100%;
   width: 100%;
-}
-
-main {
-  max-width: max-content;
-  margin: 0 auto;
+  flex: 1 70%;
 }
 
 .calendars {

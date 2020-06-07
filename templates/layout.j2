@@ -8,14 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link rel="icon" href="/favicon.svg" />
-    <link rel="stylesheet" href="https://newcss.net/lite.css" />
-    <link rel="stylesheet" href="/abfuhrkarte.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""
-    />
+    {% include '_style_assets.j2' %}
 
     <title>{{ title | to_title('Abfuhrtermine Münster') }}</title>
   </head>
@@ -43,7 +36,7 @@
         >Datenlizenz Deutschland – Namensnennung – Version 2.0</a
       >.
     </p>
-    <script src="abfuhrkarte.js"></script>
+    {% include '_script_assets.j2' %}
     <script data-goatcounter="https://goat.pape.dev/count"
         async src="//goat.pape.dev/count.js"></script>
   </body>
