@@ -2,7 +2,7 @@
 
 Heavily WIP! Visualization of the waste collection in Münster.
 
-Uses the Dataset [Entsorgungskalender 2020 der Abfallwirtschaftsbetriebe Münster (AWM)](https://opendata.stadt-muenster.de/dataset/ entsorgungskalender-2020-der-abfallwirtschaftsbetriebe-m%C3%BCnster-awm).
+Uses the Dataset [Entsorgungskalender 2020 der Abfallwirtschaftsbetriebe Münster (AWM)](https://opendata.stadt-muenster.de/dataset/entsorgungskalender-2020-der-abfallwirtschaftsbetriebe-m%C3%BCnster-awm).
 
 Currently hosted at [https://abfuhrkarte.codeformuenster.org/](https://abfuhrkarte.codeformuenster.org/).
 
