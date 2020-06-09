@@ -3,6 +3,11 @@
 {% block content %}
 <h2>Terminübersicht</h2>
 
+<p>
+  Visualisierung der Abfuhrtermine in Münster.
+  <a href="/karte">Zur Karte</a>
+</p>
+
 <div class="calendars">
 {% for month, days in months.items() %}
 <div class="calendar" data-month="{{ days[0] | dateformat('%Y-%m') }}">
@@ -29,7 +34,11 @@
 
 <hr>
 
-<ul>{%- for date in dates %}
-    <li data-date="{{ date }}"><a href="/{{ date }}/">{{ date | dateformat }}</a></li>
-{%- endfor %}</ul>
+<details>
+  <summary>Alle Tage</summary>
+  <ul>{%- for date in dates %}
+    <li><a href="/{{ date }}/">{{ date | dateformat }}</a></li>
+  {%- endfor %}</ul>
+</details>
+
 {% endblock %}
