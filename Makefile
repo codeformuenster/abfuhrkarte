@@ -21,7 +21,7 @@ data/geometries.json:
 	$(CONTAINER_ENGINE) run --rm -it -v $(PWD)/data:/app/data ${CONTAINER_RUN_ARGS} abfuhrkarte build_geometries
 
 dist/index.html:
-	$(CONTAINER_ENGINE) run --rm -it -v $(PWD)/data:/app/data -v $(PWD)/dist:/app/dist ${CONTAINER_RUN_ARGS} abfuhrkarte build_geometries
+	$(CONTAINER_ENGINE) run --rm -it -v $(PWD)/data:/app/data -v $(PWD)/dist:/app/dist ${CONTAINER_RUN_ARGS} abfuhrkarte generate_html
 
 .PHONY: all
-all: build-container data/abfuhrdaten.csv data/calendar.json dist/index.html
+all: build-container data/abfuhrdaten.csv data/calendar.json data/geometries.json dist/index.html
