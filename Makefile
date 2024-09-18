@@ -24,4 +24,4 @@ dist/index.html:
 	$(CONTAINER_ENGINE) run --rm -it -v $(PWD)/data:/app/data -v $(PWD)/dist:/app/dist ${CONTAINER_RUN_ARGS} abfuhrkarte build_geometries
 
 .PHONY: all
-all: data/abfuhrdaten.csv data/calendar.json dist/index.html
+all: build-container data/abfuhrdaten.csv data/calendar.json dist/index.html

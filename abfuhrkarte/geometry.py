@@ -9,8 +9,8 @@ def query_geometry(street_name):
         f'area(3600062591);(way(area)["name"~"{street_name}"]["highway"];);(._;>;)', verbosity='geom')
     # extract the LineString(s)
     features = []
-    for f in r.features:
-        if f.geometry['type'] == "LineString" and f['id'] != 135848859:
+    for f in r['features']:
+        if f['geometry']['type'] == "LineString" and f['properties']['id'] != 135848859:
             features.append(f)
 
     if len(features) == 1:
@@ -18,10 +18,10 @@ def query_geometry(street_name):
     elif len(features) > 1:
         new_geom = []
         for f in features:
-            new_geom.append(f.geometry['coordinates'])
+            new_geom.append(f['geometry']['coordinates'])
 
-        features[0].geometry['type'] = 'MultiLineString'
-        features[0].geometry['coordinates'] = new_geom
+        features[0]['geometry']['type'] = 'MultiLineString'
+        features[0]['geometry']['coordinates'] = new_geom
         return features[0]
 
 def query_geometries(street_names):
