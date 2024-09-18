@@ -1,7 +1,7 @@
 from sys import argv
 
 from abfuhrkarte.constants import calendar_filename, geometries_filename
-from abfuhrkarte.data import download_csv, import_calendar
+from abfuhrkarte.data import download_file, import_calendar
 from abfuhrkarte.geometry import query_geometries
 from abfuhrkarte.utils import dict_from_jsonfile, dict_to_jsonfile
 
@@ -16,12 +16,12 @@ def analyze_geometry(geometries):
 
 if __name__ == '__main__':
     if 'load_calendar' in argv:
-        csv_data = download_csv()
+        csv_data = download_file()
         calendar = import_calendar(csv_data)
 
         dict_to_jsonfile(calendar, calendar_filename)
     elif 'build_geometries' in argv:
-        data = download_csv()
+        data = download_file()
         street_names = list(set([entry.get('strasse') for entry in data]))
         geometries = query_geometries(street_names)
         dict_to_jsonfile(geometries, geometries_filename)
