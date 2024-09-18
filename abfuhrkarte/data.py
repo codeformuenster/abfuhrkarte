@@ -1,12 +1,8 @@
 import csv
-import io
-import zipfile
 from datetime import datetime
-from urllib.parse import urlparse
 
-import requests
 
-from abfuhrkarte.constants import csv_url, csv_filename
+from abfuhrkarte.constants import csv_filename
 
 
 def format_date(german_date):
@@ -57,7 +53,7 @@ def import_calendar(rows):
 
         waste_type = format_waste_type(row.get('muellart'))
 
-        if not date in calendar:
+        if date not in calendar:
             calendar[date] = []
         calendar[date].append({
             'waste_type': waste_type,
