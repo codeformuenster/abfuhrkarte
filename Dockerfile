@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.4.12-bookworm
+FROM ghcr.io/astral-sh/uv:0.4.18-bookworm
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales && \
   rm -rf /var/lib/apt/lists/* && \
@@ -8,7 +8,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales 
 
 ENV LANG=de_DE.UTF-8 LC_ALL=de_DE.UTF-8
 
-COPY . /app
+USER 1000
+
+COPY --chown=1000:1000 . /app
 
 WORKDIR /app
 
