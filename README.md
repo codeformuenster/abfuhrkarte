@@ -6,6 +6,12 @@ Uses the Dataset [Entsorgungskalender 2020 der Abfallwirtschaftsbetriebe Münste
 
 Currently hosted at [https://abfuhrkarte.codeformuenster.org/](https://abfuhrkarte.codeformuenster.org/).
 
+## Rebuild
+
+- Install `make` and either docker or podman
+- Check and edit `abfuhrkarte/constants.py`
+- Run `make`
+
 ## Quickstart
 
 Requires Python 3.8

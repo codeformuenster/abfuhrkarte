@@ -1,4 +1,5 @@
-csv_url = 'https://opendata.stadt-muenster.de/sites/default/files/awm_abfuhrdaten_20200512_104053.csv'
+csv_url = 'https://opendata.stadt-muenster.de/sites/default/files/awm_abfuhrkalender_2024.zip'
+csv_filename = 'data/abfuhrdaten.csv'
 overpass_endpoint_url = 'http://overpass/api/interpreter'
 
 calendar_filename = 'data/calendar.json'

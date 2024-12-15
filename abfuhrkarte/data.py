@@ -1,10 +1,8 @@
 import csv
-import io
 from datetime import datetime
 
-import requests
 
-from abfuhrkarte.constants import csv_url
+from abfuhrkarte.constants import csv_filename
 
 
 def format_date(german_date):
@@ -15,12 +13,12 @@ def format_waste_type(waste_type):
     return waste_type.split(" ")[0].strip(" ,")
 
 
-def download_csv():
-    r = requests.get(csv_url)
-    csvio = io.StringIO(r.text, newline="")
+def download_file():
     rows = []
-    for row in csv.DictReader(csvio, delimiter=';'):
-        rows.append(row)
+    with open(csv_filename, 'r') as reader:
+        # csvio = io.StringIO(reader, newline="")
+        for row in csv.DictReader(reader, delimiter=';'):
+            rows.append(row)
     return rows
 
 
@@ -55,7 +53,7 @@ def import_calendar(rows):
 
         waste_type = format_waste_type(row.get('muellart'))
 
-        if not date in calendar:
+        if date not in calendar:
             calendar[date] = []
         calendar[date].append({
             'waste_type': waste_type,
@@ -69,4 +67,4 @@ def import_calendar(rows):
 
 
 def download_and_import():
-    return import_calendar(download_csv())
+    return import_calendar(download_file())
